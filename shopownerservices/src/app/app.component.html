@@ -4,64 +4,106 @@
   <form [formGroup]="ownerForm" (ngSubmit)="saveOwner()" class="card p-4 mb-5">
     <h3 class="mb-3">{{ isEditMode ? 'Edit Shop Owner' : 'Add New Shop Owner' }}</h3>
     
-    <div class="form-group mb-3">
-      <label class="form-label">Owner Name:</label>
-      <input 
-        type="text"
-        class="form-control" 
-        formControlName="name"
-        [class.is-invalid]="name?.invalid && name?.touched"
-        placeholder="Enter owner name" />
-      <div class="invalid-feedback d-block" *ngIf="name?.invalid && name?.touched">
-        <span *ngIf="name?.errors?.['required']">Owner name is required</span>
-        <span *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</span>
-        <span *ngIf="name?.errors?.['maxlength']">Name cannot exceed 50 characters</span>
-      </div>
-    </div>
+    <div class="mb-3">
+    <label for="ownerName" class="form-label">Owner Name:</label>
+    <input 
+      id="ownerName"
+      type="text"
+      class="form-control" 
+      formControlName="name"
+      [class.is-invalid]="name?.invalid && name?.touched"
+      placeholder="Enter owner name" />
 
-    <div class="form-group mb-3">
-      <label class="form-label">Shop Name:</label>
-      <input 
-        type="text"
-        class="form-control" 
-        formControlName="shopName"
-        [class.is-invalid]="shopName?.invalid && shopName?.touched"
-        placeholder="Enter shop name" />
-      <div class="invalid-feedback d-block" *ngIf="shopName?.invalid && shopName?.touched">
-        <span *ngIf="shopName?.errors?.['required']">Shop name is required</span>
-        <span *ngIf="shopName?.errors?.['minlength']">Shop name must be at least 2 characters</span>
-        <span *ngIf="shopName?.errors?.['maxlength']">Shop name cannot exceed 50 characters</span>
+    @if (name?.invalid && name?.touched) {
+      <div class="invalid-feedback">
+        @if (name?.errors?.['required']) {
+          <span>Owner name is required</span>
+        }
+        @if (name?.errors?.['minlength']) {
+          <span>Name must be at least 2 characters</span>
+        }
+        @if (name?.errors?.['maxlength']) {
+          <span>Name cannot exceed 50 characters</span>
+        }
       </div>
-    </div>
+    }
+  </div>
 
-    <div class="form-group mb-3">
-      <label class="form-label">Contact Info (Phone or Email):</label>
-      <input 
-        type="text"
-        class="form-control" 
-        formControlName="contactInfo"
-        [class.is-invalid]="contactInfo?.invalid && contactInfo?.touched"
-        placeholder="Enter 10-digit phone or email" />
-      <small class="text-muted">Enter a 10-digit phone number or valid email address</small>
-      <div class="invalid-feedback d-block" *ngIf="contactInfo?.invalid && contactInfo?.touched">
-        <span *ngIf="contactInfo?.errors?.['required']">Contact info is required</span>
-        <span *ngIf="contactInfo?.errors?.['pattern']">Enter a valid 10-digit phone number or email</span>
+  <div class="mb-3">
+    <label for="shopName" class="form-label">Shop Name:</label>
+    <input 
+      id="shopName"
+      type="text"
+      class="form-control" 
+      formControlName="shopName"
+      [class.is-invalid]="shopName?.invalid && shopName?.touched"
+      placeholder="Enter shop name" />
+      
+    @if (shopName?.invalid && shopName?.touched) {
+      <div class="invalid-feedback">
+        @if (shopName?.errors?.['required']) {
+          <span>Shop name is required</span>
+        }
+        @if (shopName?.errors?.['minlength']) {
+          <span>Shop name must be at least 2 characters</span>
+        }
+        @if (shopName?.errors?.['maxlength']) {
+          <span>Shop name cannot exceed 50 characters</span>
+        }
       </div>
-    </div>
+    }
+  </div>
 
-    <div class="form-group">
+  <div class="mb-3">
+    <label for="contactInfo" class="form-label">Contact Info (Phone or Email):</label>
+    <input 
+      id="contactInfo"
+      type="text"
+      class="form-control" 
+      formControlName="contactInfo"
+      [class.is-invalid]="contactInfo?.invalid && contactInfo?.touched"
+      placeholder="Enter 10-digit phone or email" />
+    
+    <small class="text-muted">Enter a 10-digit phone number or valid email address</small>
+
+    @if (contactInfo?.invalid && contactInfo?.touched) {
+      <div class="invalid-feedback">
+        @if (contactInfo?.errors?.['required']) {
+          <span>Contact info is required</span>
+        }
+        @if (contactInfo?.errors?.['pattern']) {
+          <span>Enter a valid 10-digit phone number or email</span>
+        }
+      </div>
+    }
+  </div>
+
+    <div class="mb-3"> 
       <button 
         type="submit" 
         class="btn btn-primary me-2"
         [disabled]="ownerForm.invalid || loading">
-        <span *ngIf="!loading">{{ isEditMode ? 'Update' : 'Add' }}</span>
-        <span *ngIf="loading">
+    
+      @if (!loading) {
+      <span>{{ isEditMode ? 'Update' : 'Add' }}</span>
+      }
+    
+      @if (loading) {
+        <span>
           <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
           Loading...
         </span>
-      </button>
-      <button type="button" class="btn btn-secondary" (click)="resetForm()" [disabled]="loading">Clear</button>
-    </div>
+      }
+    </button>
+
+    <button 
+      type="button" 
+      class="btn btn-secondary" 
+      (click)="resetForm()" 
+      [disabled]="loading">
+      Clear
+    </button>
+  </div>
   </form>
 
   <div class="card p-4">
