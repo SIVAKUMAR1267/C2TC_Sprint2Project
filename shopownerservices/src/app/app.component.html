@@ -1,0 +1,103 @@
+<div class="container mt-5">
+  <h1 class="mb-4">Shop Owner Management</h1>
+
+  <form [formGroup]="ownerForm" (ngSubmit)="saveOwner()" class="card p-4 mb-5">
+    <h3 class="mb-3">{{ isEditMode ? 'Edit Shop Owner' : 'Add New Shop Owner' }}</h3>
+    
+    <div class="form-group mb-3">
+      <label class="form-label">Owner Name:</label>
+      <input 
+        type="text"
+        class="form-control" 
+        formControlName="name"
+        [class.is-invalid]="name?.invalid && name?.touched"
+        placeholder="Enter owner name" />
+      <div class="invalid-feedback d-block" *ngIf="name?.invalid && name?.touched">
+        <span *ngIf="name?.errors?.['required']">Owner name is required</span>
+        <span *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</span>
+        <span *ngIf="name?.errors?.['maxlength']">Name cannot exceed 50 characters</span>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label class="form-label">Shop Name:</label>
+      <input 
+        type="text"
+        class="form-control" 
+        formControlName="shopName"
+        [class.is-invalid]="shopName?.invalid && shopName?.touched"
+        placeholder="Enter shop name" />
+      <div class="invalid-feedback d-block" *ngIf="shopName?.invalid && shopName?.touched">
+        <span *ngIf="shopName?.errors?.['required']">Shop name is required</span>
+        <span *ngIf="shopName?.errors?.['minlength']">Shop name must be at least 2 characters</span>
+        <span *ngIf="shopName?.errors?.['maxlength']">Shop name cannot exceed 50 characters</span>
+      </div>
+    </div>
+
+    <div class="form-group mb-3">
+      <label class="form-label">Contact Info (Phone or Email):</label>
+      <input 
+        type="text"
+        class="form-control" 
+        formControlName="contactInfo"
+        [class.is-invalid]="contactInfo?.invalid && contactInfo?.touched"
+        placeholder="Enter 10-digit phone or email" />
+      <small class="text-muted">Enter a 10-digit phone number or valid email address</small>
+      <div class="invalid-feedback d-block" *ngIf="contactInfo?.invalid && contactInfo?.touched">
+        <span *ngIf="contactInfo?.errors?.['required']">Contact info is required</span>
+        <span *ngIf="contactInfo?.errors?.['pattern']">Enter a valid 10-digit phone number or email</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button 
+        type="submit" 
+        class="btn btn-primary me-2"
+        [disabled]="ownerForm.invalid || loading">
+        <span *ngIf="!loading">{{ isEditMode ? 'Update' : 'Add' }}</span>
+        <span *ngIf="loading">
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Loading...
+        </span>
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()" [disabled]="loading">Clear</button>
+    </div>
+  </form>
+
+  <div class="card p-4">
+    <h3 class="mb-3">Shop Owners List</h3>
+    
+    <div *ngIf="loading" class="alert alert-info">
+      <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      Loading data...
+    </div>
+
+    <div *ngIf="!loading && owners.length === 0" class="alert alert-info">
+      No shop owners found. Add one to get started!
+    </div>
+
+    <table class="table table-striped table-hover" *ngIf="!loading && owners.length > 0">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Owner Name</th>
+          <th>Shop Name</th>
+          <th>Contact Info</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let owner of owners">
+          <td>{{ owner.id }}</td>
+          <td>{{ owner.name }}</td>
+          <td>{{ owner.shopName }}</td>
+          <td>{{ owner.contactInfo }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="editOwner(owner)" [disabled]="loading">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteOwner(owner.id)" [disabled]="loading">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
